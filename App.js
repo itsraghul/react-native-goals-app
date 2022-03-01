@@ -8,16 +8,13 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
+import Goalitem from './components/GoalItem';
+import Goalinput from './components/GoalInput';
 
 export default function App() {
-  const [goal, setGoal] = useState('');
   const [myGoals, setMyGoals] = useState([]);
 
-  const goalInputHandler = (enteredText) => {
-    setGoal(enteredText);
-  };
-
-  const addGoalHandler = () => {
+  const addGoalHandler = (goal) => {
     setMyGoals((currentGoal) => [
       ...currentGoal,
       { key: Math.random().toString(), value: goal },
@@ -26,22 +23,10 @@ export default function App() {
   };
   return (
     <View style={styles.screen}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Add Goal here"
-          style={styles.input}
-          onChangeText={goalInputHandler}
-          value={goal}
-        />
-        <Button title="ADD" onPress={addGoalHandler} />
-      </View>
+      <Goalinput onAddGoal={addGoalHandler} placeholder="Give your goal here" />
       <FlatList
         data={myGoals}
-        renderItem={(itemData) => (
-          <View style={styles.goalText}>
-            <Text> {itemData.item.value} </Text>
-          </View>
-        )}
+        renderItem={(itemData) => <Goalitem title={itemData.item.value} />}
         // style={styles.scrollStyle}
       />
     </View>
@@ -54,26 +39,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: '30%',
   },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  input: {
-    borderBottomColor: 'black',
-    borderWidth: 1,
-    padding: 5,
-    width: '80%',
-    borderRadius: 5,
-  },
-  goalText: {
-    padding: '3%',
-    marginVertical: 10,
-    backgroundColor: '#ccc',
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 5,
-  },
+
   scrollStyle: {
     margin: 10,
   },
