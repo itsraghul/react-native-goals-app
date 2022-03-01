@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, StyleSheet, TextInput, Button } from 'react-native';
+import { View, StyleSheet, TextInput, Button, Modal } from 'react-native';
 
 const Goalinput = (props) => {
   const [goal, setGoal] = useState('');
@@ -7,16 +7,39 @@ const Goalinput = (props) => {
   const goalInputHandler = (enteredText) => {
     setGoal(enteredText);
   };
+
+  const addGoalHandler = () => {
+    props.onAddGoal(goal);
+    setGoal('');
+  };
+
+  const cancelGoalHandler = () => {
+    props.onCancel();
+    setGoal('');
+  };
   return (
-    <View style={styles.inputContainer}>
-      <TextInput
-        placeholder={props.placeholder}
-        style={styles.input}
-        onChangeText={goalInputHandler}
-        value={goal}
-      />
-      <Button title="ADD" onPress={props.onAddGoal.bind(this, goal)} />
-    </View>
+    <Modal visible={props.visible} animationType="slide">
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder={props.placeholder}
+          style={styles.input}
+          onChangeText={goalInputHandler}
+          value={goal}
+        />
+        <View style={styles.buttonStyle}>
+          <View style={styles.button}>
+            <Button title="X Cancel" onPress={cancelGoalHandler} color="red" />
+          </View>
+          <View style={styles.button}>
+            <Button
+              title="+ ADD GOAL"
+              onPress={addGoalHandler}
+              color="purple"
+            />
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 };
 
@@ -27,11 +50,20 @@ const styles = StyleSheet.create({
     padding: 5,
     width: '80%',
     borderRadius: 5,
+    marginBottom: 20,
   },
   inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
+  },
+  buttonStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '80%',
+  },
+  button: {
+    width: '40%',
   },
 });
 
